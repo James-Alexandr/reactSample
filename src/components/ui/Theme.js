@@ -1,5 +1,5 @@
-import { Typography } from '@material-ui/core';
-import { createTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+
+import { createTheme } from '@material-ui/core/styles';
 
 
 const arcBlue = "#0b72b9";
@@ -18,9 +18,19 @@ export default createTheme({
             main: `${arcOrange}`,
         }
     },
-    Typography: {
-        h3: {
+    typography: {
+        tab: {
+            fontFamily: 'Raleway',
+            textTransform: "None",
+            fontWeight: "700",
+            fontSize: "1rem",
 
+        },
+        estimate: {
+            fontFamily: "Pacifico",
+            fontSize: "1rem",
+            textTransform: "none",
+            color: "white",
         }
     }
 });
