@@ -20,7 +20,7 @@ export default createTheme({
     },
     Typography: {
         h3: {
-            fontWeight: "300"
+
         }
     }
 });

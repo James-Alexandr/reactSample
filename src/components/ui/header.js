@@ -1,7 +1,9 @@
 import React from 'react';
-import { AppBar, Toolbar, useScrollTrigger, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, useScrollTrigger } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/styles'; // A- using makeStyles to solve a problem
+
+import logo from '../../assets/logo.svg';
 
 
 function ElevationScroll(props) {
@@ -23,8 +25,13 @@ function ElevationScroll(props) {
 
 const useStyles = makeStyles(theme => ({ // A - using make styles to push content down the tool bar adding a margin
     toolbarMargin: {
-        ...theme.mixins.toolbar
+        ...theme.mixins.toolbar,
+        marginBottom: "3em"
+    },
+    logo: {
+        height: "7em",
     }
+
 }));
 
 export default function Header(props) {
@@ -34,16 +41,16 @@ export default function Header(props) {
             <ElevationScroll>
                 <AppBar position="fixed" >
 
-                    <Toolbar>
-                        <Typography variant="h3"  >
-                            Arc development
-                        </Typography>
+                    <Toolbar disableGutters>
+
+                        <img src={logo} className={classes.logo} alt="Company logo" />
 
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
             {/* A - using make styles to push content down the tool bar adding a margin */}
             <div className={classes.toolbarMargin} />
+
             {/* react fragment encloses react div without affecting the code in any way */}
         </React.Fragment>
     )
