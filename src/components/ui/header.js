@@ -1,17 +1,9 @@
-import React from 'react';
-import {
-    AppBar,
-    Toolbar,
-    useScrollTrigger,
-    Tabs,
-    Tab,
-    Button
-} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { AppBar, Toolbar, useScrollTrigger, Tabs, Tab, Button, Menu, MenuItem } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/styles'; // A- using makeStyles to solve a problem
-
 import logo from '../../assets/logo.svg';
-
+import { Link } from 'react-router-dom';
 
 function ElevationScroll(props) {
     const { children } = props;
@@ -50,6 +42,16 @@ const useStyles = makeStyles(theme => ({ // A - using make styles to push conten
         marginLeft: "10px",
         marginRight: "15px"
 
+    },
+    logoContainer: {
+        padding: "0", //eliminate the padding around the logo
+        "&:hover": {
+            background: "transparent",
+        }
+    },
+    menu: {
+        backgroundColor: theme.palette.common.Blue,
+        color: "white"
     }
 
 
@@ -57,22 +59,103 @@ const useStyles = makeStyles(theme => ({ // A - using make styles to push conten
 
 export default function Header(props) {
     const classes = useStyles();
+
+    const [value, setValue] = React.useState(0);
+    const [anchorEL, setAnchorEL] = React.useState(null);
+    const [open, setOpen] = React.useState(false);
+
+
+
+    const handleChange = (e, value) => {
+        setValue(value);
+    };
+
+
+    const handleClick = (e) => {
+        setAnchorEL(e.currentTarget);
+        setOpen(true);
+    }
+
+    const handleClose = (e) => {
+        setAnchorEL(null);
+        setOpen(false);
+    }
+
+    useEffect(() => {
+        if (window.location.pathname === "/" && value !== 0) {
+            setValue(0);
+        } else if (window.location.pathname === "/services" && value !== 1) {
+            setValue(1);
+        }
+        else if (window.location.pathname === "/revolution" && value !== 2) {
+            setValue(2);
+        }
+        else if (window.location.pathname === "/about" && value !== 3) {
+            setValue(3);
+        }
+        else if (window.location.pathname === "/contact" && value !== 4) {
+            setValue(4);
+        }
+        else if (window.location.pathname === "/estimate" && value !== 5) {
+            setValue(5);
+        }
+
+
+    }, [value]); // A - using useEffect to set the value of the state to prevent running indifenently
+
     return (
         <React.Fragment>
             <ElevationScroll>
                 <AppBar position="fixed" >
 
                     <Toolbar disableGutters>
+                        <Button
+                            disableRipple // A - using disableRipple to prevent the logo shinning on hover
+                            onClick={() => setValue(0)} // A - using onClick to set the value of the state
+                            component={Link} to="/"  // A - using Link to set the value of the state
+                            className={classes.logoContainer} >
+                            <img src={logo} className={classes.logo} alt="Company logo" />
+                        </Button>
+                        <Tabs
+                            // indicatorColor="secondary"
+                            value={value} onChange={handleChange} className={classes.tabContainer}  >
+                            <Tab
+                                className={classes.tab}
+                                component={Link} to="/"
+                                label="Home" />
 
-                        <img src={logo} className={classes.logo} alt="Company logo" />
-                        <Tabs value={1} className={classes.tabContainer}  >
-                            <Tab className={classes.tab} label="Home" value="home" />
-                            <Tab className={classes.tab} label="Services" value="profile" />
-                            <Tab className={classes.tab} label="The revolution" value="messages" />
-                            <Tab className={classes.tab} label="About us" value="messages" />
-                            <Tab className={classes.tab} label="Contact us" value="messages" />
+                            <Tab aria-owns={anchorEL ? "simple-menu" : undefined}
+                                aria-haspopup={anchorEL ? "true" : undefined}
+                                onMouseOver={event => handleClick(event)}
+                                className={classes.tab}
+                                component={Link} to="/services"
+                                label="Services" />
+                            <Tab className={classes.tab} component={Link} to="/revolution" label="The revolution" />
+                            <Tab className={classes.tab} component={Link} to="/about" label="About us" />
+                            <Tab className={classes.tab} component={Link} to="/contact" label="Contact us" />
                         </Tabs>
-                        <Button variant="contained" color="secondary" className={classes.button}> Free Estimate</Button>
+                        <Button
+
+                            component={Link} to="/estimate"
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                        > Free Estimate</Button>
+                        <Menu
+                            elevation={0}
+                            classes={{ paper: classes.menu }}
+                            id="simple-menu"
+                            anchorEL
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{ onMouseLeave: handleClose }}  >
+                            <MenuItem onClick={() => { handleClose(); setValue(1) }} component={Link} to="/services" > Services</MenuItem>
+
+                            <MenuItem onClick={() => { handleClose(); setValue(1) }} component={Link} to="/customsoftware" > Custom Software</MenuItem>
+                            <MenuItem onClick={() => { handleClose(); setValue(1) }} component={Link} to="/mobileapps"> Mobile Dev</MenuItem>
+                            <MenuItem onClick={() => { handleClose(); setValue(1) }} component={Link} to="/websites"> Website Dev</MenuItem>
+
+                        </Menu>
                     </Toolbar>
                 </AppBar>
             </ElevationScroll>
