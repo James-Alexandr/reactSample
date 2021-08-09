@@ -5,6 +5,7 @@ import Header from "./ui/header";
 import theme from './ui/Theme'
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -23,6 +24,7 @@ function App() {
 
         </Switch>
       </BrowserRouter>
+
     </ThemeProvider>
   );
 }
