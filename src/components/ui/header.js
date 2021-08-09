@@ -60,10 +60,15 @@ const useStyles = makeStyles(theme => ({ // A - using make styles to push conten
     },
     menu: {
         backgroundColor: theme.palette.common.Blue,
-        color: "white"
+        color: "white",
+        borderRadius: "0px",
     },
     menuItem: {
-        ...theme.typography.tab
+        ...theme.typography.tab,
+        opacity: "0.7",
+        "&:hover": {
+            opacity: 1
+        }
     }
 
 }));
@@ -73,11 +78,10 @@ const useStyles = makeStyles(theme => ({ // A - using make styles to push conten
 
 export default function Header(props) {
     const classes = useStyles();
-
     const [value, setValue] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
-
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
 
     const handleChange = (e, value) => {
@@ -94,6 +98,17 @@ export default function Header(props) {
         setAnchorEl(null);
         setOpen(false);
     }
+
+    const handleMenuItemClick = (e, index) => {
+        setAnchorEl(null);
+        setOpen(false);
+        setSelectedIndex(index);
+    }
+
+    const menuOptions = [{ name: "Services", "link": "/services" },
+    { name: "Customer Software Development", "link": "/customsoftware" },
+    { name: "Mobile App Development", "link": "/mobileapps" },
+    { name: "Website Development", "link": "/websites" }]
 
     useEffect(() => {
         if (window.location.pathname === "/" && value !== 0) {
@@ -114,6 +129,59 @@ export default function Header(props) {
             setValue(5);
         }
 
+        // eslint-disable-next-line default-case
+        switch (window.location.pathname) {
+            case "/":
+                if (value !== 0) {
+                    setValue(0);
+                }
+                break;
+            case "/services":
+                if (value !== 1) {
+                    setValue(1);
+                    setSelectedIndex(0);
+                }
+                break;
+            case "/customsoftware":
+                if (value !== 1) {
+                    setValue(1);
+                    setSelectedIndex(1);
+                }
+                break;
+            case "/mobileapps":
+                if (value !== 1) {
+                    setValue(1);
+                    setSelectedIndex(2);
+                }
+                break;
+            case "/websites":
+                if (value !== 1) {
+                    setValue(1);
+                    setSelectedIndex(3);
+                }
+                break;
+            case "/revolution":
+                if (value !== 2) {
+                    setValue(2);
+                }
+                break;
+            case "/about":
+                if (value !== 3) {
+                    setValue(3);
+                }
+                break;
+            case "/contact":
+                if (value !== 4) {
+                    setValue(4);
+                }
+                break;
+            case "/estimate":
+                if (value !== 5) {
+                    setValue(5);
+                }
+                break;
+
+        }
 
     }, [value]); // A - using useEffect to set the value of the state to prevent running indifenently
 
@@ -170,12 +238,20 @@ export default function Header(props) {
                             MenuListProps={{ onMouseLeave: handleClose }}
                         // elevation={0}
                         >
-
-                            <MenuItem classes={{ root: classes.menuItem }} onClick={() => { handleClose(); setValue(1) }} component={Link} to="/services" > Services</MenuItem>
-                            <MenuItem classes={{ root: classes.menuItem }} onClick={() => { handleClose(); setValue(1) }} component={Link} to="/customsoftware" > Custom Software</MenuItem>
-                            <MenuItem classes={{ root: classes.menuItem }} onClick={() => { handleClose(); setValue(1) }} component={Link} to="/mobileapps"> Mobile Dev</MenuItem>
-                            <MenuItem classes={{ root: classes.menuItem }} onClick={() => { handleClose(); setValue(1) }} component={Link} to="/websites"> Website Dev</MenuItem>
-
+                            {menuOptions.map((option, i) => (
+                                <MenuItem
+                                    key={option}
+                                    component={Link}
+                                    to={option.link}
+                                    classes={{ root: classes.menuItem }}
+                                    onClick={event => {
+                                        handleMenuItemClick(event, i);
+                                        setValue(1);
+                                        handleClose();
+                                    }}
+                                    selected={i === selectedIndex && value === 1}>
+                                    {option.name}
+                                </MenuItem>))}
                         </Menu>
 
                     </Toolbar>
@@ -189,3 +265,14 @@ export default function Header(props) {
     )
 
 }
+
+
+
+// id="simple-menu"
+// anchorEl={anchorEl}
+// keepMounted
+// open={Boolean(anchorEl)}
+// onClose={handleClose}
+// classes={{ paper: classes.menu }}
+// MenuListProps={{ onMouseLeave: handleClose }}
+// elevation={0}
